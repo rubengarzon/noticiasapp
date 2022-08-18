@@ -14,7 +14,6 @@ export class Tab1Page implements OnInit {
 
   ngOnInit(): void {
     this.newService.getTopHeadLines().subscribe((articles) => {
-      console.log(articles[1].urlToImage);
       this.articles = articles;
     });
   }
