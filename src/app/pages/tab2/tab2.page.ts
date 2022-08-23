@@ -40,4 +40,13 @@ export class Tab2Page implements OnInit {
         this.articles = articles;
       });
   }
+
+  loadData(event: any) {
+    this.newsService
+      .getTopHeadLinesByCategory(this.selectedCategory)
+      .subscribe((articles) => {
+        this.articles = articles;
+        event.target.complete();
+      });
+  }
 }
