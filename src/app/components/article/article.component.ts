@@ -1,7 +1,13 @@
 import { Component, Input } from '@angular/core';
 import { Article } from 'src/app/interfaces';
 import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
-import { ActionSheetController, Platform } from '@ionic/angular';
+import {
+  ActionSheetButton,
+  ActionSheetController,
+  Platform,
+} from '@ionic/angular';
+import { SocialSharing } from '@awesome-cordova-plugins/social-sharing/ngx';
+import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
   selector: 'app-article',
@@ -14,7 +20,9 @@ export class ArticleComponent {
   constructor(
     private platform: Platform,
     private iab: InAppBrowser,
-    private actionSheetCtrl: ActionSheetController
+    private actionSheetCtrl: ActionSheetController,
+    private socialSharing: SocialSharing,
+    private storageService: StorageService
   ) {}
 
   //open article in browser when clicked
@@ -28,34 +36,44 @@ export class ArticleComponent {
   }
 
   async onOpenMenu() {
+    const normalBtns: ActionSheetButton[] = [
+      {
+        text: 'Favorito',
+        icon: 'heart-outline',
+        handler: () => this.onToogleFavorite(),
+      },
+      {
+        text: 'Cancelar',
+        icon: 'close-outline',
+        role: 'cancel',
+      },
+    ];
+
+    const shareBtn: ActionSheetButton = {
+      text: 'Compartir',
+      icon: 'share-outline',
+      handler: () => this.onShareArticle(),
+    };
+
+    if (this.platform.is('capacitor')) {
+      normalBtns.unshift(shareBtn);
+    }
+
     const actionSheet = await this.actionSheetCtrl.create({
       header: 'Opciones',
-      buttons: [
-        {
-          text: 'Compartir',
-          icon: 'share-outline',
-          handler: () => this.onShareArticle(),
-        },
-        {
-          text: 'Favorito',
-          icon: 'heart-outline',
-          handler: () => this.onToogleFavorite(),
-        },
-        {
-          text: 'Cancelar',
-          icon: 'close-outline',
-          role: 'cancel',
-        },
-      ],
+      buttons: normalBtns,
     });
+
     await actionSheet.present();
   }
 
   onShareArticle() {
-    console.log('share article');
+    const { title, source, url } = this.article;
+
+    this.socialSharing.share(title, source.name, '', url);
   }
 
   onToogleFavorite() {
-    console.log('toogle favorite');
+    this.storageService.saveRemoveArticle(this.article);
   }
 }
