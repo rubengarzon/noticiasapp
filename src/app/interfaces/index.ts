@@ -1,21 +1,19 @@
 export interface NewsResponse {
-  status: string;
-  totalResults: number;
+  totalArticles: number;
   articles: Article[];
 }
 
 export interface Article {
-  source: Source;
-  author?: string;
   title: string;
-  description?: string;
+  description: string;
+  content: string;
   url: string;
-  urlToImage?: string;
+  image: string;
   publishedAt: Date;
-  content?: string;
+  source: Source;
 }
 
 export interface Source {
-  id?: string;
   name: string;
+  url: string;
 }

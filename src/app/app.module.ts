@@ -11,6 +11,8 @@ import { AppComponent } from './app.component';
 import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
 import { SocialSharing } from '@awesome-cordova-plugins/social-sharing/ngx';
 import { IonicStorageModule } from '@ionic/storage-angular';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -19,6 +21,12 @@ import { IonicStorageModule } from '@ionic/storage-angular';
     IonicStorageModule.forRoot(),
     IonicModule.forRoot(),
     AppRoutingModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+      // Register the ServiceWorker as soon as the application is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000'
+    }),
   ],
   providers: [
     InAppBrowser,

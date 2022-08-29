@@ -17,10 +17,4 @@ export class Tab1Page implements OnInit {
       this.articles = articles;
     });
   }
-  loadData(event: any) {
-    this.newService.getTopHeadLines().subscribe((articles) => {
-      this.articles = articles;
-      event.target.complete();
-    });
-  }
 }

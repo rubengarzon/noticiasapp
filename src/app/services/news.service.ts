@@ -5,7 +5,6 @@ import { environment } from 'src/environments/environment';
 import { Article, NewsResponse } from '../interfaces';
 import { map } from 'rxjs/operators';
 
-const apiKey = environment.apiKey;
 const apiUrl = environment.apiUrl;
 
 @Injectable({
@@ -16,16 +15,14 @@ export class NewsService {
 
   getTopHeadLines(): Observable<Article[]> {
     return this.http
-      .get<NewsResponse>(
-        `${apiUrl}top-headlines?country=us&apiKey=${apiKey}&pageSize=100`
-      )
+      .get<NewsResponse>(`${apiUrl}`)
       .pipe(map(({ articles }) => articles));
   }
 
   getTopHeadLinesByCategory(category: string): Observable<Article[]> {
     return this.http
       .get<NewsResponse>(
-        `${apiUrl}top-headlines?country=us&category=${category}&apiKey=${apiKey}&pageSize=100`
+        `${apiUrl}&topic=${category}`
       )
       .pipe(map(({ articles }) => articles));
   }

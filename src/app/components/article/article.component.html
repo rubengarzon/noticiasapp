@@ -15,7 +15,7 @@
   <ion-card-title class="ion-padding-horizontal ion-margin-bottom" (click)="openArticle()">
     {{article.title}}
   </ion-card-title>
-  <ion-img *ngIf="article.urlToImage" [src]="article.urlToImage" (click)="openArticle()">
+  <ion-img *ngIf="article.image" [src]="article.image" (click)="openArticle()">
   </ion-img>
   <ion-card-content *ngIf="article.description">
     <p [innerHTML]="article.description"></p>

@@ -9,9 +9,11 @@ import { NewsService } from 'src/app/services/news.service';
 })
 export class Tab2Page implements OnInit {
   public categories: string[] = [
+    'breaking-news',
+    'world',
+    'nation',
     'business',
     'entertainment',
-    'general',
     'health',
     'science',
     'sports',
@@ -37,17 +39,7 @@ export class Tab2Page implements OnInit {
     this.newsService
       .getTopHeadLinesByCategory(this.selectedCategory)
       .subscribe((articles) => {
-        console.log(articles);
         this.articles = articles;
-      });
-  }
-
-  loadData(event: any) {
-    this.newsService
-      .getTopHeadLinesByCategory(this.selectedCategory)
-      .subscribe((articles) => {
-        this.articles = articles;
-        event.target.complete();
       });
   }
 }
