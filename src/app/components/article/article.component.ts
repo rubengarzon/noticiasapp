@@ -58,11 +58,7 @@ export class ArticleComponent {
       icon: 'share-outline',
       handler: () => this.onShareArticle(),
     };
-
-    if (this.platform.is('capacitor')) {
-      normalBtns.unshift(shareBtn);
-    }
-
+    normalBtns.unshift(shareBtn);
     const actionSheet = await this.actionSheetCtrl.create({
       header: 'Opciones',
       buttons: normalBtns,
@@ -72,12 +68,27 @@ export class ArticleComponent {
   }
 
   onShareArticle() {
-    const { title, source, url } = this.article;
-
-    this.socialSharing.share(title, source.name, '', url);
+    this.compartirNoticia();
   }
 
   onToogleFavorite() {
     this.storageService.saveRemoveArticle(this.article);
+  }
+
+  compartirNoticia() {
+    const { title, source, url } = this.article;
+    if (this.platform.is('cordova')) {
+      this.socialSharing.share(title, source.name, '', url);
+    } else {
+      if (navigator.share) {
+        navigator.share({
+          title,
+          text: title,
+          url,
+        });
+      } else {
+        console.log('No se puede compartir');
+      }
+    }
   }
 }
